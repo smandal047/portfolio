@@ -12,7 +12,7 @@
 
 
 {% block body_part_one %}
-<!-- slider -->
+<!-- carousel slider -->
 <section class="slider_section">
     <div id="myCarousel" class="carousel slide banner-main" data-ride="carousel">
         <div class="carousel-inner">
@@ -20,11 +20,12 @@
                 <img class="first-slide" src="{% static 'images/banner2.png' %}" alt="First slide">
                 <div class="container">
                     <div class="carousel-caption relative">
-                        <h1>This is ME !!!</h1>
-                        <p><b>I am Sayantan Mandal. Warm heartily welcomes you to my site and encourages you to drop
-                        me an email and lets know each other. Feel free to move here and there who knows one
+                        <h1>Greetings !!!</h1>
+                        <p><b>
+                            I am Sayantan Mandal. Warm heartily welcomes you to my site and encourages you to drop
+                            me an email and lets know each other. Feel free to move here and there who knows one
                             might get what it have been looking for.</b></p>
-                        <a href="#">Read More</a>
+                        <a href="{% url 'about' %}">Read More</a>
                     </div>
                 </div>
             </div>
@@ -32,10 +33,12 @@
                 <img class="second-slide" src="{% static 'images/cs3.png' %}" alt="Second slide">
                 <div class="container">
                     <div class="carousel-caption relative">
-                        <h1>Yes, I am a Software Engineer</h1>
-                        <p><b>Yes I like to work with software. In-fact this site is made by ME, whole from scratch except
-                            a few things, hehe.. </b></p>
-                        <a href="#">Read More</a>
+                        <h1>Yes, I am a Data Engineer</h1>
+                        <p><b>
+                            Yes I like to work with software. In-fact this site is made by ME, whole from scratch except
+                            a few things, hehe.. 
+                        </b></p>
+                        <a href="{% url 'my_works' %}">Read More</a>
                     </div>
                 </div>
             </div>
@@ -44,8 +47,10 @@
                 <div class="container">
                     <div class="carousel-caption relative">
                         <h1>And Yes, I am also a Guitarist</h1>
-                        <p><b>I don't really admit to this. But yes I am very passionate about Guitars</b></p>
-                        <a href="#">Read More</a>
+                        <p><b>
+                            I don't really admit to this. But yes I am very passionate about Guitars
+                        </b></p>
+                        <a href="{% url 'my_rhythm' %}">Read More</a>
                     </div>
                 </div>
             </div>
@@ -58,39 +63,39 @@
         </a>
     </div>
 </section>
-<!-- end slider  -->
+<!-- end carousel slider  -->
 {% endblock %}
 
 
 {% block body_part_two %}
-<!-- about  -->
+<!-- myWorks: start from here -->
 <div id="about" class="about top_layer">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
+       <div class="row">
+          <div class="col-md-12">
+             <div class="titlepage">
+                <h2><a href="{% url 'my_works' %}"></a>Hi there...</a></h2>
+                <span>
+                    I am a Data Engineer who is aspiring to be a Data Scientist, one day. My top skills include 
+                    data fetching and data wrangling in big-data environment. Let me navigate you to myWorks, its 
+                    a short portfolio of what i have done and whats currently been cooking. 
+                    <br>
+                    See you at myWorks...
+                </span>
+             </div>
+          </div>
+       </div>
+       <div class="row">
+          <div class="col-md-12">
                 <div class="img-box">
-                    <figure><img src="{% static 'images/about.png' %}" alt="img"/></figure>
+                    <figure><img src="{% static 'images/comp_graph.jpg' %}" alt="img"></figure>
+                    <a href="{% url 'my_works' %}">myWorks ></a>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="titlepage">
-                    <h2>Hey, I'm Sayantan</h2>
-                    <span>
-                        We can work on a project or can also jam together, all per your liking. Just let me know. 
-                        Happy to hear from you...
-                    </span>
-                    <h1>Let's get in touch !!!</h1>
-                    
-                    <div class="img-box">
-                        <!-- TODO: this will direct to contact page, when its made -->
-                        <a href="{% url 'about' %}">read more</a>  
-                    </div>
-                </div>
-            </div>
-        </div>
+          </div>
+       </div>
     </div>
-</div>
-<!-- end abouts -->
+ </div>
+<!-- end myWorks -->
 {% endblock %}
 
 
@@ -100,11 +105,38 @@
 
 
 {% block body_part_four %}
-
+<!-- contact  -->
+<div id="about" class="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="img-box">
+                    <figure><img src="{% static 'images/about.png' %}" alt="img"/></figure>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="titlepage">
+                    <h2>About me</h2>
+                    <h1>Want to know me a little more</h1>
+                    <span>
+                        Here's a brief introduction of myself, with a personal touch.
+                    </span>
+                    <br><br>
+                    <div class="img-box">
+                        <!-- TODO: this will direct to contact page, when its made -->
+                        <a href="{% url 'about' %}">read more</a>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end contact -->
 {% endblock %}
 
 
 {% block body_part_five %}
+<!-- thank you token -->
 
-<!-- end Testimonial -->
+<!-- end thank you token -->
 {% endblock %}

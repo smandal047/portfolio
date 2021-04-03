@@ -154,18 +154,18 @@
         bottom: 0;
         padding: 0;
     }
-    .testimonial .contact {
+    /* .contact {
         padding: 30px 30px;
-    }
-    .testimonial .contact .contactus {
+    } */
+    .contact .contactus {
         padding: 10px 19px;
         margin-bottom: 20px;
     }
-    .testimonial .contact .textarea {
+    .contact .textarea {
         margin-bottom: 20px;
         padding: 11px 19px;
     }
-    .testimonial .contact .send {
+    .contact .send {
         padding: 7px 50px;
     }
     .footer .address h3 {
@@ -224,18 +224,18 @@
         margin-right: 15px;
         padding: 10px 41px 10px 41px;
     }
-    .testimonial .contact {
+    /* .contact {
         padding: 20px 30px;
-    }
-    .testimonial .contact .contactus {
+    } */
+    .contact .contactus {
         padding: 10px 19px;
         margin-bottom: 18px;
     }
-    .testimonial .contact .textarea {
+    .contact .textarea {
         margin-bottom: 18px;
         padding: 11px 19px;
     }
-    .testimonial .contact .send {
+    .contact .send {
         padding: 7px 50px;
     }
     ul.socil_link li {
@@ -279,9 +279,9 @@
     .download .titlepage h2 {
         font-size: 35px;
     }
-    .testimonial .contact {
+    /* .contact {
         margin-top: 30px;
-    }
+    } */
     .address {
         margin-bottom: 30px;
     }
@@ -365,9 +365,9 @@
         padding: 12px 0px;
         font-size: 16px;
     }
-    .testimonial .contact {
+    /* .contact {
         margin-top: 30px;
-    }
+    } */
     .address {
         margin-bottom: 30px;
     }
