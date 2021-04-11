@@ -35,7 +35,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '*.herokuapp.com']
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "smandal.herokuapp.com"]
 
 
 # Application definition
@@ -131,17 +131,53 @@ USE_L10N = True
 USE_TZ = True
 
 # Simplified static file serving.
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
+# Ensure STATIC_ROOT exists.
+os.makedirs(STATIC_ROOT, exist_ok=True)
+
 # Extra places for collectstatic to find static files.
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+LOGGING = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'verbose': {
+                    'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                               'pathname=%(pathname)s lineno=%(lineno)s ' +
+                               'funcname=%(funcName)s %(message)s'),
+                    'datefmt': '%Y-%m-%d %H:%M:%S'
+                },
+                'simple': {
+                    'format': '%(levelname)s %(message)s'
+                }
+            },
+            'handlers': {
+                'null': {
+                    'level': 'DEBUG',
+                    'class': 'logging.NullHandler',
+                },
+                'console': {
+                    'level': 'DEBUG',
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'verbose'
+                }
+            },
+            'loggers': {
+                'testlogger': {
+                    'handlers': ['console'],
+                    'level': 'INFO',
+                }
+            }
+        }
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
