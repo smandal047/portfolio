@@ -12,12 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import dotenv
-import os   
-
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,17 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
-    
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-DEBUG_PROPAGATE_EXCEPTIONS = True
+DEBUG = True
+DEBUG_PROPAGATE_EXCEPTIONS = not DEBUG
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'smandal.herokuapp.com']
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -49,11 +45,12 @@ INSTALLED_APPS = [
 
     # custom apps
     'pages',
+    'my_works_blog'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',       # for static serving
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static serving
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,7 +64,10 @@ ROOT_URLCONF = 'portfolio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'my_works_blog/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -147,7 +147,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -160,7 +159,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -177,37 +175,36 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-
 # Logs
 LOGGING = {
-            'version': 1,
-            'disable_existing_loggers': False,
-            'formatters': {
-                'verbose': {
-                    'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
-                               'pathname=%(pathname)s lineno=%(lineno)s ' +
-                               'funcname=%(funcName)s %(message)s'),
-                    'datefmt': '%Y-%m-%d %H:%M:%S'
-                },
-                'simple': {
-                    'format': '%(levelname)s %(message)s'
-                }
-            },
-            'handlers': {
-                'null': {
-                    'level': 'DEBUG',
-                    'class': 'logging.NullHandler',
-                },
-                'console': {
-                    'level': 'DEBUG',
-                    'class': 'logging.StreamHandler',
-                    'formatter': 'verbose'
-                }
-            },
-            'loggers': {
-                'testlogger': {
-                    'handlers': ['console'],
-                    'level': 'INFO',
-                }
-            }
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
         }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}
