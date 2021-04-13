@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import dotenv
 import os   
-import django_heroku
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,17 +23,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # Adding .env into system variables
-dotenv_file = os.path.join(BASE_DIR, ".env")
+dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
+    
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
-ALLOWED_HOSTS = ["0.0.0.0", "localhost", "smandal.herokuapp.com"]
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'smandal.herokuapp.com']
 
 
 # Application definition
@@ -49,21 +49,17 @@ INSTALLED_APPS = [
 
     # custom apps
     'pages',
-
-
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',       # for static serving
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # heroku
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -86,7 +82,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-
+# ---------------------------------------------------------
+# TODO: Fix the database configuration
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -97,6 +94,40 @@ DATABASES = {
     }
 }
 
+"""
+    if databases:
+        # Integrity check.
+        if 'DATABASES' not in config:
+            config['DATABASES'] = {'default': None}
+
+        if db_colors:
+            # Support all Heroku databases.
+            # TODO: This appears to break TestRunner.
+            for (env, url) in os.environ.items():
+                if env.startswith('HEROKU_POSTGRESQL'):
+                    db_color = env[len('HEROKU_POSTGRESQL_'):].split('_')[0]
+
+                    logger.info('Adding ${} to DATABASES Django setting ({}).'.format(env, db_color))
+
+                    config['DATABASES'][db_color] = dj_database_url.parse(url, conn_max_age=MAX_CONN_AGE, ssl_require=True)
+
+        if 'DATABASE_URL' in os.environ:
+            logger.info('Adding $DATABASE_URL to default DATABASE Django setting.')
+
+            # Configure Django for DATABASE_URL environment variable.
+            config['DATABASES']['default'] = dj_database_url.config(conn_max_age=MAX_CONN_AGE, ssl_require=True)
+
+            logger.info('Adding $DATABASE_URL to TEST default DATABASE Django setting.')
+
+            # Enable test database if found in CI environment.
+            if 'CI' in os.environ:
+                config['DATABASES']['default']['TEST'] = config['DATABASES']['default']
+
+        else:
+            logger.info('$DATABASE_URL not found, falling back to previous settings!')
+
+"""
+# --------------------------------------------------------
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -122,7 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -130,12 +161,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Simplified static file serving.
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
 
 # Ensure STATIC_ROOT exists.
@@ -143,9 +172,13 @@ os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 )
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+
+# Logs
 LOGGING = {
             'version': 1,
             'disable_existing_loggers': False,
@@ -178,6 +211,3 @@ LOGGING = {
                 }
             }
         }
-
-# Activate Django-Heroku.
-# django_heroku.settings(locals())
