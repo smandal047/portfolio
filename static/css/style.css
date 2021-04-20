@@ -1978,6 +1978,16 @@ img.zoom {
 	margin-bottom: 20px;
 }
 
+.download .progress { margin-left: auto; margin-right:auto; }
+
+.download h3 {
+	color: #000;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	padding-bottom: 30px;
+}
+
 .carousel-item {
 	text-align: center;
 }
@@ -1997,9 +2007,7 @@ img.zoom {
 }
 
 #main_slider .carousel-control-prev:hover,
-#main_slider .carousel-control-next:hover,
-#main_slider .carousel-control-prev:focus,
-#main_slider .carousel-control-next:focus {
+#main_slider .carousel-control-next:hover{
 	background: #0fc690;
 	color: #fff;
 }
@@ -2176,9 +2184,7 @@ img.zoom {
 }
 
 #testimonial_slider .carousel-control-prev:hover,
-#testimonial_slider .carousel-control-next:hover,
-#testimonial_slider .carousel-control-prev:focus,
-#testimonial_slider .carousel-control-next:focus {
+#testimonial_slider .carousel-control-next:hover{
 	color: #fff;
 	background: #0fc690;
 	width: 50px;
@@ -2475,9 +2481,7 @@ ul.contant_icon li img {
 }
 
 #myCarousel .carousel-control-prev:hover,
-#myCarousel .carousel-control-next:hover,
-#myCarousel .carousel-control-prev:focus,
-#myCarousel .carousel-control-next:focus {
+#myCarousel .carousel-control-next:hover{
 	background: #0fc690;
 	color: #fff;
 }

@@ -4,7 +4,7 @@
 
 
 {% block head_title %}
-<title>myWorks</title>
+<title>{{ project.title }}</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -65,9 +65,10 @@
             {% for post in posts %}
             <h2><a href="{% url 'my_works:post_detail' project.pk post.pk %}">{{ post.post_title }}</a></h2>
             <small>
-                {{ post.created_on.date }} |&nbsp;
+                {{ post.created_on.date }}
             </small>
-            <p>{{ post.body | slice:":400" }}...</p>
+            <p>{{ post.body | slice:":400" | safe }}...</p>
+            <hr>
             {% endfor %}
         </div>
     </div>

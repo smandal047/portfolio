@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
     # custom apps
     'pages',
-    'my_works_blog'
+    'my_works_blog',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

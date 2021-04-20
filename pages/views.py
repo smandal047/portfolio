@@ -20,8 +20,8 @@ def my_works_view(request):
 
 
 # myRhythm page
-def my_rhythm_view(request):
-    return render(request, 'my_rhythm.html', {})
+def portfolio_view(request):
+    return render(request, 'portfolio.html', {})
 
 
 
