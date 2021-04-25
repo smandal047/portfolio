@@ -33,24 +33,24 @@
                 <img class="second-slide" src="{% static 'images/cs3.png' %}" alt="Second slide">
                 <div class="container">
                     <div class="carousel-caption relative">
-                        <h1>Yes, I am a Data Engineer</h1>
+                        <h1>And, I am a Data Engineer</h1>
                         <p><b>
-                            Yes I like to work with software. In-fact this site is made by ME, whole from scratch except
+                            I like to work with software. In-fact this site is made by ME, whole from scratch except
                             a few things, hehe.. 
                         </b></p>
-                        <a href="{% url 'my_works' %}">Read More</a>
+                        <a href="{% url 'portfolio' %}">Read More</a>
                     </div>
                 </div>
             </div>
             <div class="carousel-item">
-                <img class="second-slide" src="{% static 'images/slash1.jpg' %}" alt="Second slide">
+                <img class="second-slide" src="{% static 'images/my-works.jpg' %}" alt="Second slide">
                 <div class="container">
                     <div class="carousel-caption relative">
-                        <h1>And Yes, I am also a Guitarist</h1>
+                        <h1>Few of myWorks</h1>
                         <p><b>
-                            I don't really admit to this. But yes I am very passionate about Guitars
+                            Here's breif list of myWorks that I have done
                         </b></p>
-                        <a href="{% url 'my_rhythm' %}">Read More</a>
+                        <a href="{% url 'my_works:index' %}">Read More</a>
                     </div>
                 </div>
             </div>
@@ -74,13 +74,10 @@
        <div class="row">
           <div class="col-md-12">
              <div class="titlepage">
-                <h2><a href="{% url 'my_works' %}"></a>Hi there...</a></h2>
-                <span>
-                    I am a Data Engineer who is aspiring to be a Data Scientist, one day. My top skills include 
-                    data fetching and data wrangling in big-data environment. Let me navigate you to myWorks, its 
-                    a short portfolio of what i have done and whats currently been cooking. 
-                    <br>
-                    See you at myWorks...
+                <h2><a href="{% url 'my_works:index' %}"></a>Hi there...</a></h2>
+                 <span>
+                     I am Sayantan and I am a Data Engineer who is aspiring to be a Data Scientist, one day. My top skills include
+                    data fetching and data wrangling in big-data environment.
                 </span>
              </div>
           </div>
@@ -89,7 +86,7 @@
           <div class="col-md-12">
                 <div class="img-box">
                     <figure><img src="{% static 'images/comp_graph.jpg' %}" alt="img"></figure>
-                    <a href="{% url 'my_works' %}">myWorks ></a>
+                    <a href="{% url 'portfolio' %}">Portfolio ></a>
                 </div>
           </div>
        </div>
@@ -106,7 +103,7 @@
 
 {% block body_part_four %}
 <!-- contact  -->
-<div id="about" class="about">
+<div id="contact" class="about">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
