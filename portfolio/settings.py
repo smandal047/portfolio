@@ -11,32 +11,40 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+import logging
 import dotenv
-import os   
-import django_heroku
+import sys
+import os
 
+LOG_LEVEL = 'INFO'
+MAX_CONN_AGE = 600
 
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # Adding .env into system variables
-dotenv_file = os.path.join(BASE_DIR, ".env")
+dotenv_file = BASE_DIR / '.env'
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
+# setting the marker for dev environment
+DEV_ENV = (sys.argv[1] == 'runserver')
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True if DEV_ENV else False
+DEBUG_PROPAGATE_EXCEPTIONS = not DEBUG
+logger.info(f'Setting DEBUG={DEBUG}.')
 
-ALLOWED_HOSTS = ["0.0.0.0", "localhost", "smandal.herokuapp.com"]
-
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'smandal.herokuapp.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -49,21 +57,19 @@ INSTALLED_APPS = [
 
     # custom apps
     'pages',
-
-
+    'my_works_blog',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static serving
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # heroku
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -71,7 +77,10 @@ ROOT_URLCONF = 'portfolio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'my_works_blog/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,17 +95,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEV_ENV:
+    logger.info('Setting Sqlite DATABASE.')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    if 'DATABASE_URL' in os.environ:
+        try:
+            logger.info('Adding $DATABASE_URL to default DATABASE Django setting.')
 
+            # Configure Django for DATABASE_URL environment variable.
+            prod_db = dj_database_url.config(conn_max_age=MAX_CONN_AGE, ssl_require=True)
+            DATABASES = {'default': prod_db}
+
+            logger.info('Adding $DATABASE_URL to TEST default DATABASE Django setting.')
+
+        except Exception as e:
+            logger.info(f'$DATABASE_URL setting failed, {e}')
+    else:
+        logger.info(f'$DATABASE_URL not found, falling back to previous settings!')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -116,13 +140,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -130,12 +153,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Simplified static file serving.
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
 
 # Ensure STATIC_ROOT exists.
@@ -143,41 +163,41 @@ os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 )
 
-LOGGING = {
-            'version': 1,
-            'disable_existing_loggers': False,
-            'formatters': {
-                'verbose': {
-                    'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
-                               'pathname=%(pathname)s lineno=%(lineno)s ' +
-                               'funcname=%(funcName)s %(message)s'),
-                    'datefmt': '%Y-%m-%d %H:%M:%S'
-                },
-                'simple': {
-                    'format': '%(levelname)s %(message)s'
-                }
-            },
-            'handlers': {
-                'null': {
-                    'level': 'DEBUG',
-                    'class': 'logging.NullHandler',
-                },
-                'console': {
-                    'level': 'DEBUG',
-                    'class': 'logging.StreamHandler',
-                    'formatter': 'verbose'
-                }
-            },
-            'loggers': {
-                'testlogger': {
-                    'handlers': ['console'],
-                    'level': 'INFO',
-                }
-            }
-        }
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Activate Django-Heroku.
-# django_heroku.settings(locals())
+# Logs
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': ('%(asctime)s [%(process)d] [%(levelname)s] ' +
+                       'pathname=%(pathname)s lineno=%(lineno)s ' +
+                       'funcname=%(funcName)s %(message)s'),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': LOG_LEVEL,
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': LOG_LEVEL,
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'testlogger': {
+            'handlers': ['console'],
+            'level': LOG_LEVEL,
+        }
+    }
+}

@@ -9,3 +9,12 @@ python manage.py runserver
                  migrate                        # makemigration and migrate are always run together after any change in model
                  shell			                # bring the site cmd line
                  collectstatic                  # for collection of css/images
+
+
+---------------Django-Heroku commands-----------------
+heroku run python manage.py makemigrations          -a smandal
+                            migrate                 -a smandal
+
+
+---------------Django Deployment checks-----------------
+1. Debug = False

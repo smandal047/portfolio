@@ -13,16 +13,9 @@ def about_view(request):
     return render(request, 'about.html', {})
 
 
-# myWorks page
-def my_works_view(request):
-    return render(request, 'my_works.html', {})
-
-
-
 # myRhythm page
-def my_rhythm_view(request):
-    return render(request, 'my_rhythm.html', {})
-
+def portfolio_view(request):
+    return render(request, 'portfolio.html', {})
 
 
 # contact page
