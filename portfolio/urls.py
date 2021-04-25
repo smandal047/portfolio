@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from pages.views import homepage_view, about_view, contact_view, my_works_view, portfolio_view
+from pages.views import homepage_view, about_view, contact_view, portfolio_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +30,5 @@ urlpatterns = [
     path('contact/', contact_view, name='contact'),
 
     # my_works_blog urls
-    path('my_works/', include('my_works_blog.urls', namespace='my_works')),
+    path('my-works/', include('my_works_blog.urls', namespace='my_works')),
 ]

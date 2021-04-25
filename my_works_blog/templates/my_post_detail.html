@@ -46,9 +46,20 @@
 <div id="my_works_index" class="contact">
     <div class="container">
         <div class="row">
-                <h1>HI</h1>
+            <div class="col-md-12">
+            <h3>{{ post.post_title }}</h3>
+            </div>
+            <hr>
+            <div class="col-md-12">
+            <div align="left">
+                <span>{{ post.created_on.date }}</span>
+            </div>
+            </div>
+            <hr>
+            <span>{{ post.body | safe }}</span>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
 

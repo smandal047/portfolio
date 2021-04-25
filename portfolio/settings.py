@@ -11,8 +11,16 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+import logging
 import dotenv
+import sys
 import os
+
+LOG_LEVEL = 'INFO'
+MAX_CONN_AGE = 600
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,9 +36,13 @@ if os.path.isfile(dotenv_file):
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
+# setting the marker for dev environment
+DEV_ENV = (sys.argv[1] == 'runserver')
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if DEV_ENV else False
 DEBUG_PROPAGATE_EXCEPTIONS = not DEBUG
+logger.info(f'Setting DEBUG={DEBUG}.')
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'smandal.herokuapp.com']
 
@@ -83,52 +95,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-# ---------------------------------------------------------
-# TODO: Fix the database configuration
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEV_ENV:
+    logger.info('Setting Sqlite DATABASE.')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-
-"""
-    if databases:
-        # Integrity check.
-        if 'DATABASES' not in config:
-            config['DATABASES'] = {'default': None}
-
-        if db_colors:
-            # Support all Heroku databases.
-            # TODO: This appears to break TestRunner.
-            for (env, url) in os.environ.items():
-                if env.startswith('HEROKU_POSTGRESQL'):
-                    db_color = env[len('HEROKU_POSTGRESQL_'):].split('_')[0]
-
-                    logger.info('Adding ${} to DATABASES Django setting ({}).'.format(env, db_color))
-
-                    config['DATABASES'][db_color] = dj_database_url.parse(url, conn_max_age=MAX_CONN_AGE, ssl_require=True)
-
-        if 'DATABASE_URL' in os.environ:
+else:
+    if 'DATABASE_URL' in os.environ:
+        try:
             logger.info('Adding $DATABASE_URL to default DATABASE Django setting.')
 
             # Configure Django for DATABASE_URL environment variable.
-            config['DATABASES']['default'] = dj_database_url.config(conn_max_age=MAX_CONN_AGE, ssl_require=True)
+            prod_db = dj_database_url.config(conn_max_age=MAX_CONN_AGE, ssl_require=True)
+            DATABASES = {'default': prod_db}
 
             logger.info('Adding $DATABASE_URL to TEST default DATABASE Django setting.')
 
-            # Enable test database if found in CI environment.
-            if 'CI' in os.environ:
-                config['DATABASES']['default']['TEST'] = config['DATABASES']['default']
-
-        else:
-            logger.info('$DATABASE_URL not found, falling back to previous settings!')
-
-"""
-# --------------------------------------------------------
+        except Exception as e:
+            logger.info(f'$DATABASE_URL setting failed, {e}')
+    else:
+        logger.info(f'$DATABASE_URL not found, falling back to previous settings!')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -193,11 +185,11 @@ LOGGING = {
     },
     'handlers': {
         'null': {
-            'level': 'DEBUG',
+            'level': LOG_LEVEL,
             'class': 'logging.NullHandler',
         },
         'console': {
-            'level': 'DEBUG',
+            'level': LOG_LEVEL,
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         }
@@ -205,7 +197,7 @@ LOGGING = {
     'loggers': {
         'testlogger': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': LOG_LEVEL,
         }
     }
 }

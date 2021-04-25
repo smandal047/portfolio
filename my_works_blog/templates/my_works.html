@@ -28,42 +28,13 @@
 
 {% block body_part_two %}
 <!-- about  -->
-<div id="contact" class="contact top_layer">
-    <div class="container">
-        <div class="row">
-            <!--row 1-->
-            <div class="col-md-6">
-                <div class="titlepage">
-                    <h3>My Works/Portfolio</h3>
-                    <span>
-                        Experienced Software Engineer with specializing in Python Development for data-engineering, data-analysis and server application in the large-scale enterprises. Worked on technologies like pySpark, scikit-learn, Django.
-                    </span>
-                    <br><br>
-                    <span>
-                        Data Engineering, Data Wrangling, ETL jobs, Data Pipeline creation or web development are among few topics, I am working continously to expand it. Currently exploring the world of Data-Science, do not know where it will take.
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="titlepage">
-                    <div class="img-box">
-                        <ul>
-                            <li>
-                                <figure><img src="{% static 'images/working-on-comp.jpg' %}" alt="img"/></figure>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- end abouts -->
 {% endblock %}
 
 
 {% block body_part_three %}
-<div id="my_works_index" class="contact">
+<div id="my_works_index" class="contact top_layer">
     <div class="container">
         <div class="row">
             {% for project in projects %}
